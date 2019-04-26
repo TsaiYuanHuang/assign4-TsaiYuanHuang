@@ -496,6 +496,7 @@ void draw() {
         playerY = PLAYER_INIT_Y;
         playerCol = (int) (playerX / SOIL_SIZE);
         playerRow = (int) (playerY / SOIL_SIZE);
+        soilChangeTimer = 0;
         playerMoveTimer = 0;
         playerHealth = 2;
 
