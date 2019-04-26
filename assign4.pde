@@ -275,82 +275,83 @@ void draw() {
         playerMoveDirection = DOWN;
         playerMoveTimer = playerMoveDuration;
       }
+      else{
       
 
-      if(leftState){
-
-        groundhogDisplay = groundhogLeft;
-
-        // Check left boundary
-        if(playerCol > 0){
-
+        if(leftState){
+  
+          groundhogDisplay = groundhogLeft;
+  
+          // Check left boundary
+          if(playerCol > 0){
+  
+            // HINT:
+            // Check if "player is NOT above the ground AND there's soil on the left"
+            // > If so, dig it and decrease its health
+            // > Else then start moving (set playerMoveDirection and playerMoveTimer)
+            if(playerRow>=0 && soilHealth[playerCol-1][playerRow] > 0){
+              if(soilHealth[playerCol-1][playerRow] <= 15) soilChangeTimer = soilChangeDuration;
+              if(soilHealth[playerCol-1][playerRow] <= 30 && soilHealth[playerCol-1][playerRow] > 15) soilChangeTimer = stone0ChangeDuration;
+              if(soilHealth[playerCol-1][playerRow] <= 45 && soilHealth[playerCol-1][playerRow] > 30) soilChangeTimer = stone1ChangeDuration;
+            }
+            else{
+            playerMoveDirection = LEFT;
+            playerMoveTimer = playerMoveDuration;
+            }
+          }
+  
+        }else if(rightState){
+  
+          groundhogDisplay = groundhogRight;
+  
+          // Check right boundary
+          if(playerCol < SOIL_COL_COUNT - 1){
+  
+            // HINT:
+            // Check if "player is NOT above the ground AND there's soil on the right"
+            // > If so, dig it and decrease its health
+            // > Else then start moving (set playerMoveDirection and playerMoveTimer)
+           if(playerRow>=0 && soilHealth[playerCol+1][playerRow] > 0){
+              if(soilHealth[playerCol+1][playerRow] <= 15) soilChangeTimer = soilChangeDuration;
+              if(soilHealth[playerCol+1][playerRow] <= 30 && soilHealth[playerCol+1][playerRow] > 15) soilChangeTimer = stone0ChangeDuration;
+              if(soilHealth[playerCol+1][playerRow] <= 45 && soilHealth[playerCol+1][playerRow] > 30) soilChangeTimer = stone1ChangeDuration;
+            }
+            else{
+            playerMoveDirection = RIGHT;
+            playerMoveTimer = playerMoveDuration;
+            }
+          }
+  
+        }else if(downState){
+  
+          groundhogDisplay = groundhogDown;
+  
+          // Check bottom boundary
+  
           // HINT:
-          // Check if "player is NOT above the ground AND there's soil on the left"
-          // > If so, dig it and decrease its health
-          // > Else then start moving (set playerMoveDirection and playerMoveTimer)
-          if(playerRow>=0 && soilHealth[playerCol-1][playerRow] > 0){
-            if(soilHealth[playerCol-1][playerRow] <= 15) soilChangeTimer = soilChangeDuration;
-            if(soilHealth[playerCol-1][playerRow] <= 30 && soilHealth[playerCol-1][playerRow] > 15) soilChangeTimer = stone0ChangeDuration;
-            if(soilHealth[playerCol-1][playerRow] <= 45 && soilHealth[playerCol-1][playerRow] > 30) soilChangeTimer = stone1ChangeDuration;
+          // We have already checked "player is NOT at the bottom AND the soil under the player is empty",
+          // and since we can only get here when the above statement is false,
+          // we only have to check again if "player is NOT at the bottom" to make sure there won't be out-of-bound exception
+          if(playerRow < SOIL_ROW_COUNT - 1){
+  
+            // > If so, dig it and decrease its health
+             if(soilHealth[playerCol][playerRow+1] > 0){
+              if(soilHealth[playerCol][playerRow+1] <= 15) soilChangeTimer = soilChangeDuration;
+              if(soilHealth[playerCol][playerRow+1] <= 30 && soilHealth[playerCol][playerRow+1] > 15) soilChangeTimer = stone0ChangeDuration;
+              if(soilHealth[playerCol][playerRow+1] <= 45 && soilHealth[playerCol][playerRow+1] > 30) soilChangeTimer = stone1ChangeDuration;
+            }
+            /*else{
+            // For requirement #3:
+            // Note that player never needs to move down as it will always fall automatically,
+            // so the following 2 lines can be removed once you finish requirement #3
+  
+            playerMoveDirection = DOWN;
+            playerMoveTimer = playerMoveDuration;
+  
+            }*/
           }
-          else{
-          playerMoveDirection = LEFT;
-          playerMoveTimer = playerMoveDuration;
-          }
-        }
-
-      }else if(rightState){
-
-        groundhogDisplay = groundhogRight;
-
-        // Check right boundary
-        if(playerCol < SOIL_COL_COUNT - 1){
-
-          // HINT:
-          // Check if "player is NOT above the ground AND there's soil on the right"
-          // > If so, dig it and decrease its health
-          // > Else then start moving (set playerMoveDirection and playerMoveTimer)
-         if(playerRow>=0 && soilHealth[playerCol+1][playerRow] > 0){
-            if(soilHealth[playerCol+1][playerRow] <= 15) soilChangeTimer = soilChangeDuration;
-            if(soilHealth[playerCol+1][playerRow] <= 30 && soilHealth[playerCol+1][playerRow] > 15) soilChangeTimer = stone0ChangeDuration;
-            if(soilHealth[playerCol+1][playerRow] <= 45 && soilHealth[playerCol+1][playerRow] > 30) soilChangeTimer = stone1ChangeDuration;
-          }
-          else{
-          playerMoveDirection = RIGHT;
-          playerMoveTimer = playerMoveDuration;
-          }
-        }
-
-      }else if(downState){
-
-        groundhogDisplay = groundhogDown;
-
-        // Check bottom boundary
-
-        // HINT:
-        // We have already checked "player is NOT at the bottom AND the soil under the player is empty",
-        // and since we can only get here when the above statement is false,
-        // we only have to check again if "player is NOT at the bottom" to make sure there won't be out-of-bound exception
-        if(playerRow < SOIL_ROW_COUNT - 1){
-
-          // > If so, dig it and decrease its health
-           if(soilHealth[playerCol][playerRow+1] > 0){
-            if(soilHealth[playerCol][playerRow+1] <= 15) soilChangeTimer = soilChangeDuration;
-            if(soilHealth[playerCol][playerRow+1] <= 30 && soilHealth[playerCol][playerRow+1] > 15) soilChangeTimer = stone0ChangeDuration;
-            if(soilHealth[playerCol][playerRow+1] <= 45 && soilHealth[playerCol][playerRow+1] > 30) soilChangeTimer = stone1ChangeDuration;
-          }
-          /*else{
-          // For requirement #3:
-          // Note that player never needs to move down as it will always fall automatically,
-          // so the following 2 lines can be removed once you finish requirement #3
-
-          playerMoveDirection = DOWN;
-          playerMoveTimer = playerMoveDuration;
-
-          }*/
         }
       }
-
     }
 
     // If player is now moving?
@@ -402,13 +403,13 @@ void draw() {
       soilChangeTimer -- ; 
       
       if(leftState){
-        if(playerCol>=0){
+        if(playerCol>=0 && playerRow>=0){
           soilHealth[playerCol-1][playerRow] -- ;
           if(soilHealth[playerCol-1][playerRow] <= 0) soilHealth[playerCol-1][playerRow] = 0 ;
         }
       }
       if(rightState){
-        if(playerCol<8){
+        if(playerCol<7 && playerRow>=0){
           soilHealth[playerCol+1][playerRow] -- ;
           if(soilHealth[playerCol+1][playerRow] <= 0) soilHealth[playerCol+1][playerRow] = 0 ;
         }
